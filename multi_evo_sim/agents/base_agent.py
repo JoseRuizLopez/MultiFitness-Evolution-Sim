@@ -1,4 +1,5 @@
 from enum import Enum
+import random
 
 
 class ActionType(Enum):
@@ -22,8 +23,19 @@ class BaseAgent:
         self.steps_survived = 0
 
     def act(self, observation):
-        """Define la acción del agente dado un estado de observación."""
-        raise NotImplementedError
+        """Define la acción del agente dado un estado de observación.
+
+        Esta implementación básica permite que el agente pueda
+        participar en la simulación sin necesidad de subclasses.
+        El comportamiento es muy simple: si hay un recurso en la
+        posición actual intentará recolectarlo; de lo contrario se
+        moverá en una dirección aleatoria.
+        """
+        if observation.get("resource_here"):
+            return Action(ActionType.GATHER)
+
+        dx, dy = random.choice([(1, 0), (-1, 0), (0, 1), (0, -1)])
+        return Action(ActionType.MOVE, direction=(dx, dy))
 
 
 class Action:

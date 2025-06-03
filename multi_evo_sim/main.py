@@ -2,7 +2,7 @@ from .env.world import World
 from .agents.base_agent import BaseAgent
 from .config import POPULATION_SIZE
 from .evolution.genetic_algorithm import GeneticAlgorithm
-from .evolution.fitness_functions import example_fitness
+from .evolution.fitness_functions import fitness_combinado
 from .visualization.logger import log
 import random
 
@@ -18,7 +18,7 @@ def run_simulation():
     for ag in population:
         world.add_agent(ag, position=(0, 0))
 
-    ga = GeneticAlgorithm(population, example_fitness)
+    ga = GeneticAlgorithm([agent], fitness_combinado)
     fitness = ga.step()
     log(f"Fitness calculado: {fitness}")
 

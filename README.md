@@ -49,6 +49,10 @@ Cada métrica puede tener un peso o función de penalización. Puedes experiment
 - Pareto dominance (frentes no dominados),
 - Ponderaciones dinámicas.
 
+Los pesos iniciales de cada métrica se encuentran en `multi_evo_sim/config.py`
+mediante el diccionario `FITNESS_WEIGHTS`. Puedes modificarlos para priorizar
+unas u otras métricas durante la evaluación.
+
 ### Tecnologías sugeridas
 Entorno visual          ->  matplotlib (modo visualización)
 Lógica de simulación    ->  Python puro (clases de mundo y agentes)

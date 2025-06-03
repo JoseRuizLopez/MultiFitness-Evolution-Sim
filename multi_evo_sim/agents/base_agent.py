@@ -15,6 +15,12 @@ class BaseAgent:
         # Cantidad de recursos recolectados por el agente
         self.inventory = 0
 
+        # Métricas básicas utilizadas por las funciones de fitness
+        self.resources_collected = 0
+        self.shared_resources = 0
+        self.alive = True
+        self.steps_survived = 0
+
     def act(self, observation):
         """Define la acción del agente dado un estado de observación."""
         raise NotImplementedError

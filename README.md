@@ -9,6 +9,9 @@ Recursos limitados y distribuibles (comida, energía...).
 
 Obstáculos, zonas peligrosas.
 
+Los recursos desaparecen al ser consumidos y se reponen automáticamente en una
+posición libre del mapa.
+
 Tiempo discretizado por "ticks".
 
 ### Agentes evolutivos
@@ -41,6 +44,7 @@ Para manejar múltiples objetivos sin necesidad de convertirlos en una única m�
 - MOEA/D (Multi-Objective Evolutionary Algorithm based on Decomposition): divide el problema multiobjetivo en subproblemas escalarizados.
 
 Implementable desde cero o usando pymoo.
+Se incluye una versión simplificada de NSGA-II para evolucionar la población.
 
 ### Métricas de recompensa posibles
 
@@ -54,6 +58,10 @@ Cada métrica puede tener un peso o función de penalización. Puedes experiment
 
 - Pareto dominance (frentes no dominados),
 - Ponderaciones dinámicas.
+
+Los pesos iniciales de cada métrica se encuentran en `multi_evo_sim/config.py`
+mediante el diccionario `FITNESS_WEIGHTS`. Puedes modificarlos para priorizar
+unas u otras métricas durante la evaluación.
 
 ### Tecnologías sugeridas
 Entorno visual          ->  matplotlib (modo visualización)

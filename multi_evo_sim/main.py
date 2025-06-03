@@ -5,7 +5,8 @@ from .agents.base_agent import BaseAgent
 from .config import POPULATION_SIZE
 from .evolution.genetic_algorithm import GeneticAlgorithm
 from .evolution.fitness_functions import fitness_combinado
-from .visualization.logger import log
+from .visualization.logger import ExperimentLogger, log
+from .visualization.render import Renderer
 import random
 
 
@@ -15,27 +16,41 @@ def random_agent(size=5):
 
 
 def run_simulation():
+    renderer = Renderer()
+    exp_logger = ExperimentLogger()
+
     # Mundo con un recurso inicial en (0, 0)
     world = World(width=10, height=10, resources=[Resource((0, 0))])
+    renderer.draw(world)
 
     # Agente individual para prueba rápida (NeuralAgent)
     agent = NeuralAgent(input_size=2)
     world.add_agent(agent, position=(0, 0))
+    renderer.draw(world)
 
     # O alternativamente: población evolutiva
     population = [random_agent() for _ in range(POPULATION_SIZE)]
     for ag in population:
-        world.add_agent(ag, position=(0, 0))
+        pos = (random.randint(0, world.width - 1), random.randint(0, world.height - 1))
+        world.add_agent(ag, position=pos)
+        renderer.draw(world)
 
     ga = GeneticAlgorithm(population, fitness_combinado)
     fitness = ga.step()
+    fronts, _ = ga.fast_non_dominated_sort(fitness)
+    exp_logger.log_fitness(0, fitness)
+    if fronts:
+        exp_logger.log_pareto_front(0, fronts[0], fitness)
     log(f"Fitness calculado: {fitness}")
 
     # Ejecutar un paso en el mundo para que los agentes actúen
-    world.step()
+    for step in range(200):
+        world.step()
+        renderer.draw(world)
     for ag in population:
         log(f"Inventario del agente: {ag.inventory}")
     log(f"Inventario del agente individual (Neural): {agent.inventory}")
+    exp_logger.save()
 
 
 if __name__ == "__main__":

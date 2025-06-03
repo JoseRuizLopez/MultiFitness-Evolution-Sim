@@ -53,25 +53,45 @@ Registro y análisis     ->	pandas, matplotlib, seaborn
 
 ### Estructura de carpetas sugerida
 multi_evo_sim/
-│
+
+|
+
 ├── agents/
+
 │   └── base_agent.py
+
 │   └── neural_agent.py
+
 │
+
 ├── env/
+
 │   └── world.py
+
 │   └── resource.py
+
 │
+
 ├── evolution/
+
 │   └── genetic_algorithm.py
+
 │   └── fitness_functions.py
+
 │
+
 ├── visualization/
+
 │   └── render.py
+
 │   └── logger.py
+
 │
+
 ├── main.py
+
 ├── config.py
+
 └── README.md
 
 ### Qué se puede investigar / demostrar

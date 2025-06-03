@@ -9,6 +9,9 @@ Recursos limitados y distribuibles (comida, energía...).
 
 Obstáculos, zonas peligrosas.
 
+Los recursos desaparecen al ser consumidos y se reponen automáticamente en una
+posición libre del mapa.
+
 Tiempo discretizado por "ticks".
 
 ### Agentes evolutivos
@@ -31,6 +34,7 @@ Para manejar múltiples objetivos sin necesidad de convertirlos en una única m�
 - MOEA/D (Multi-Objective Evolutionary Algorithm based on Decomposition): divide el problema multiobjetivo en subproblemas escalarizados.
 
 Implementable desde cero o usando pymoo.
+Se incluye una versión simplificada de NSGA-II para evolucionar la población.
 
 ### Métricas de recompensa posibles
 

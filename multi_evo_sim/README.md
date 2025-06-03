@@ -12,3 +12,8 @@ Las funciones de fitness implementadas incluyen:
 
 El peso de cada métrica puede configurarse en `config.py` mediante el diccionario
 `FITNESS_WEIGHTS`.
+## Entorno 2D
+
+La clase `World` permite crear mapas en modo cuadriculado o en modo continuo. Es
+posible configurar obstáculos, zonas peligrosas y recursos que se regeneran de
+forma automática cuando son consumidos.

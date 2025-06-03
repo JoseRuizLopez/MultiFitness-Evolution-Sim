@@ -25,6 +25,16 @@ Comportamientos pueden codificarse como:
 2. Máquina de estados finitos.
 3. Secuencia de reglas con pesos.
 
+En esta versión se define un genotipo como una lista de parámetros numéricos que
+alimentan a una red neuronal mínima. Dicha red produce una de tres acciones
+básicas:
+
+* **Moverse**: desplaza al agente una casilla dentro del mundo.
+* **Recolectar**: consume el recurso presente en la casilla actual y lo almacena
+  en el inventario del agente.
+* **Cooperar**: comparte un recurso del inventario con otro agente que se
+  encuentre en la misma posición.
+
 ### Sistema evolutivo
 
 #### Algoritmo Evolutivo Base: NSGA-II o MOEA/D

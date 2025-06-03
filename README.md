@@ -9,6 +9,9 @@ Recursos limitados y distribuibles (comida, energía...).
 
 Obstáculos, zonas peligrosas.
 
+Los recursos desaparecen al ser consumidos y se reponen automáticamente en una
+posición libre del mapa.
+
 Tiempo discretizado por "ticks".
 
 ### Agentes evolutivos

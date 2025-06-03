@@ -1,7 +1,7 @@
 from .env.world import World
 from .agents.base_agent import BaseAgent
 from .evolution.genetic_algorithm import GeneticAlgorithm
-from .evolution.fitness_functions import example_fitness
+from .evolution.fitness_functions import fitness_combinado
 from .visualization.logger import log
 
 
@@ -10,7 +10,7 @@ def run_simulation():
     agent = BaseAgent()
     world.add_agent(agent, position=(0, 0))
 
-    ga = GeneticAlgorithm([agent], example_fitness)
+    ga = GeneticAlgorithm([agent], fitness_combinado)
     fitness = ga.step()
     log(f"Fitness calculado: {fitness}")
 

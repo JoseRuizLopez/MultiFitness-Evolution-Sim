@@ -16,20 +16,24 @@ def random_agent(size=5):
 
 
 def run_simulation():
+    renderer = Renderer()
+    exp_logger = ExperimentLogger()
+
     # Mundo con un recurso inicial en (0, 0)
     world = World(width=10, height=10, resources=[Resource((0, 0))])
+    renderer.draw(world)
 
     # Agente individual para prueba rápida (NeuralAgent)
     agent = NeuralAgent(input_size=2)
     world.add_agent(agent, position=(0, 0))
-
-    renderer = Renderer()
-    exp_logger = ExperimentLogger()
+    renderer.draw(world)
 
     # O alternativamente: población evolutiva
     population = [random_agent() for _ in range(POPULATION_SIZE)]
     for ag in population:
-        world.add_agent(ag, position=(0, 0))
+        pos = (random.randint(0, world.width - 1), random.randint(0, world.height - 1))
+        world.add_agent(ag, position=pos)
+        renderer.draw(world)
 
     ga = GeneticAlgorithm(population, fitness_combinado)
     fitness = ga.step()
@@ -40,7 +44,7 @@ def run_simulation():
     log(f"Fitness calculado: {fitness}")
 
     # Ejecutar un paso en el mundo para que los agentes actúen
-    for step in range(3):
+    for step in range(200):
         world.step()
         renderer.draw(world)
     for ag in population:

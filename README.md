@@ -118,3 +118,26 @@ multi_evo_sim/
 - Cuánto influye la búsqueda local en el resultado final.
 - Visualización de frentes de Pareto en recompensas.
 - Generación automática de estrategias sorprendentes (emergentes).
+
+## Ejecución rápida
+
+1. Instala las dependencias principales:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. Ejecuta los tests:
+    ```bash
+    pytest -q
+    ```
+
+3. Ejecuta la simulación básica:
+
+   ```bash
+   python -m multi_evo_sim.main
+   ```
+
+El archivo `multi_evo_sim/config.py` contiene parámetros globales como el tamaño
+del mundo, el número de agentes inicial y los pesos de cada métrica de fitness.
+Modifica estos valores para experimentar con diferentes configuraciones.

@@ -124,10 +124,15 @@ multi_evo_sim/
 1. Instala las dependencias principales:
 
    ```bash
-   pip install numpy pandas matplotlib
+   pip install -r requirements.txt
    ```
 
-2. Ejecuta la simulación básica:
+2. Ejecuta los tests:
+    ```bash
+    pytest -q
+    ```
+
+3. Ejecuta la simulación básica:
 
    ```bash
    python -m multi_evo_sim.main

@@ -17,7 +17,7 @@ def test_base_agent_act():
 
 
 def test_neural_agent_act_returns_action():
-    agent = NeuralAgent(input_size=2)
+    agent = NeuralAgent()
     obs = {
         'position': (1, 1),
         'resource_here': 0,

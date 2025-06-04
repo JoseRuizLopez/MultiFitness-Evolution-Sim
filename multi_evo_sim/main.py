@@ -24,7 +24,7 @@ def run_simulation():
     renderer.draw(world)
 
     # Agente individual para prueba rápida (NeuralAgent)
-    agent = NeuralAgent(input_size=2)
+    agent = NeuralAgent()
     world.add_agent(agent, position=(0, 0))
     renderer.draw(world)
 

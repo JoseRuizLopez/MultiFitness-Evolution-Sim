@@ -18,7 +18,14 @@ from .visualization.render import Renderer
 from . import config
 
 
-renderer = Renderer()
+# Renderer instance created lazily to avoid opening windows in worker processes
+renderer = None
+
+def _get_renderer():
+    global renderer
+    if renderer is None:
+        renderer = Renderer()
+    return renderer
 
 def _evaluate_agent(agent, steps: int = 100, draw: bool=False) -> list:
     """Ejecuta una simulaci\u00f3n corta con compa\u00f1eros y devuelve el fitness."""
@@ -38,7 +45,7 @@ def _evaluate_agent(agent, steps: int = 100, draw: bool=False) -> list:
     for _ in range(steps):
         world.step()
         if draw:
-            renderer.draw(world)
+            _get_renderer().draw(world)
     return fitness_combinado(agent)
 
 

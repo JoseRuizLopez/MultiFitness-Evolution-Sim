@@ -20,10 +20,17 @@ class MemeticNSGAII(NSGAII):
         fitness_fn: Callable,
         crossover_rate: float = 0.9,
         mutation_rate: float = 0.2,
+        n_jobs: int = 1,
         local_search_iters: int = 3,
         local_mutation: float = 0.1,
     ) -> None:
-        super().__init__(population, fitness_fn, crossover_rate, mutation_rate)
+        super().__init__(
+            population,
+            fitness_fn,
+            crossover_rate,
+            mutation_rate,
+            n_jobs=n_jobs,
+        )
         self.local_search_iters = local_search_iters
         self.local_mutation = local_mutation
 
@@ -47,7 +54,7 @@ class MemeticNSGAII(NSGAII):
 
     def step(self):
         """Ejecuta un paso evolutivo con búsqueda local y elitismo."""
-        fitness = [self.fitness_fn(ind) for ind in self.population]
+        fitness = self._evaluate_population(self.population)
         fronts, ranks = self.fast_non_dominated_sort(fitness)
         crowding = [0.0] * len(self.population)
         for front in fronts:
@@ -72,7 +79,7 @@ class MemeticNSGAII(NSGAII):
             if len(offspring) < len(self.population):
                 offspring.append(child2)
 
-        offspring_fitness = [self.fitness_fn(ind) for ind in offspring]
+        offspring_fitness = self._evaluate_population(offspring)
         combined = self.population + offspring
         combined_fitness = fitness + offspring_fitness
         fronts, ranks = self.fast_non_dominated_sort(combined_fitness)
@@ -93,7 +100,7 @@ class MemeticNSGAII(NSGAII):
 
         # Asegurar que el mejor individuo permanezca en la población
         if not any(ind.genotype == elite.genotype for ind in new_population):
-            np_fitness = [self.fitness_fn(ind) for ind in new_population]
+            np_fitness = self._evaluate_population(new_population)
             np_fronts, np_ranks = self.fast_non_dominated_sort(np_fitness)
             np_crowding = [0.0] * len(new_population)
             for front in np_fronts:

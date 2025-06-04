@@ -6,12 +6,19 @@ from typing import List, Callable
 class NSGAII:
     """Implementación muy simplificada del algoritmo NSGA-II."""
 
-    def __init__(self, population: List, fitness_fn: Callable, crossover_rate: float = 0.9,
-                 mutation_rate: float = 0.2):
+    def __init__(
+        self,
+        population: List,
+        fitness_fn: Callable,
+        crossover_rate: float = 0.9,
+        mutation_rate: float = 0.2,
+        n_jobs: int = 1,
+    ):
         self.population = population
         self.fitness_fn = fitness_fn
         self.crossover_rate = crossover_rate
         self.mutation_rate = mutation_rate
+        self.n_jobs = n_jobs
 
     # --- Utilidades de evaluación y ordenamiento ---
     @staticmethod
@@ -97,9 +104,19 @@ class NSGAII:
             individual.update_network()
         return individual
 
+    def _evaluate_population(self, population):
+        if self.n_jobs == 1:
+            return [self.fitness_fn(ind) for ind in population]
+        from concurrent.futures import ProcessPoolExecutor
+        from functools import partial
+
+        with ProcessPoolExecutor(max_workers=self.n_jobs) as executor:
+            func = partial(self.fitness_fn)
+            return list(executor.map(func, population))
+
     # --- Ciclo principal de una generación ---
     def step(self):
-        fitness = [self.fitness_fn(ind) for ind in self.population]
+        fitness = self._evaluate_population(self.population)
         fronts, ranks = self.fast_non_dominated_sort(fitness)
         crowding = [0.0] * len(self.population)
         for front in fronts:
@@ -118,7 +135,7 @@ class NSGAII:
                 offspring.append(self.mutate(child2))
 
         # Evaluar descendencia
-        offspring_fitness = [self.fitness_fn(ind) for ind in offspring]
+        offspring_fitness = self._evaluate_population(offspring)
         combined = self.population + offspring
         combined_fitness = fitness + offspring_fitness
         fronts, ranks = self.fast_non_dominated_sort(combined_fitness)

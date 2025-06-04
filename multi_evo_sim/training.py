@@ -37,7 +37,7 @@ def _evaluate_agent(agent, steps: int = 100, draw: bool=False) -> list:
     return fitness_combinado(agent)
 
 
-def train(population_size=10, generations=1000, memetic: bool = config.USE_MEMETIC_ALGORITHM):
+def train(population_size=10, generations=5000, memetic: bool = config.USE_MEMETIC_ALGORITHM):
     """Lanza un proceso evolutivo con NSGA-II o MemeticNSGAII."""
     population = [NeuralAgent() for _ in range(population_size)]
     ga_cls = MemeticNSGAII if memetic else GeneticAlgorithm
@@ -45,7 +45,7 @@ def train(population_size=10, generations=1000, memetic: bool = config.USE_MEMET
     logger = ExperimentLogger()
 
     for gen in range(1, generations+1):
-        if gen % 500 == 0:
+        if gen % 1000 == 0:
             fitness = [_evaluate_agent(ind, draw=True) for ind in ga.population]
         else:
             fitness = [_evaluate_agent(ind, draw=False) for ind in ga.population]

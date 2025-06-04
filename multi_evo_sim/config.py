@@ -5,7 +5,7 @@ POPULATION_SIZE = 10
 # Algoritmo evolutivo por defecto. Si se establece en ``True`` se empleará
 # ``MemeticNSGAII`` en ``training.py``. De lo contrario se usará
 # ``GeneticAlgorithm``.
-USE_MEMETIC_ALGORITHM = False
+USE_MEMETIC_ALGORITHM = True
 
 # Pesos para las distintas métricas de fitness
 FITNESS_WEIGHTS = {

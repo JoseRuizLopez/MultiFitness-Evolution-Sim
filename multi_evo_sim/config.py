@@ -2,6 +2,11 @@ WORLD_WIDTH = 10
 WORLD_HEIGHT = 10
 POPULATION_SIZE = 10
 
+# Algoritmo evolutivo por defecto. Si se establece en ``True`` se empleará
+# ``MemeticNSGAII`` en ``training.py``. De lo contrario se usará
+# ``GeneticAlgorithm``.
+USE_MEMETIC_ALGORITHM = False
+
 # Pesos para las distintas métricas de fitness
 FITNESS_WEIGHTS = {
     # Las métricas que tienden a permanecer constantes en simulaciones

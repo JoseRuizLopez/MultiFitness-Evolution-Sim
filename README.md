@@ -147,6 +147,10 @@ multi_evo_sim/
    python -m multi_evo_sim.training
    ```
 
+   Si deseas utilizar el algoritmo memético `MemeticNSGAII`, ejecuta el módulo
+   con la opción `--memetic` o establece `USE_MEMETIC_ALGORITHM = True` en
+   `multi_evo_sim/config.py`.
+
    Durante el entrenamiento se guardan tres archivos CSV: `fitness_log.csv`,
    `pareto_front.csv` e `inventory_log.csv`, donde este último almacena el
    inventario final de cada agente en cada generación.

@@ -12,7 +12,7 @@ from .visualization.render import Renderer
 
 renderer = Renderer()
 
-def _evaluate_agent(agent, steps: int = 50, draw: bool=False) -> list:
+def _evaluate_agent(agent, steps: int = 100, draw: bool=False) -> list:
     """Ejecuta una simulaci\u00f3n corta con compa\u00f1eros y devuelve el fitness."""
     agent.inventory = 0
     agent.resources_collected = 0
@@ -22,7 +22,7 @@ def _evaluate_agent(agent, steps: int = 50, draw: bool=False) -> list:
 
     # M\u00e1s recursos y un agente adicional permiten que se observe cooperaci\u00f3n y
     # crecimiento durante la evaluaci\u00f3n, generando fitness m\u00e1s variado.
-    resources = [Resource((random.randint(0, 9), random.randint(0, 9))) for _ in range(5)]
+    resources = [Resource((random.randint(0, 9), random.randint(0, 9))) for _ in range(10)]
     world = World(width=10, height=10, resources=resources)
     world.add_agent(agent, position=(random.randint(0, 9), random.randint(0, 9)))
     # Agregar un compa\u00f1ero b\u00e1sico para posibilitar acciones de cooperaci\u00f3n

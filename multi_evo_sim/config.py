@@ -10,7 +10,7 @@ FITNESS_WEIGHTS = {
     # para observar variaciones significativas.
     "eficiencia": 0.5,
     "diversidad_genetica": 0.5,
-    "cooperacion": 2.0,
-    "crecimiento": 2.0,
+    "cooperacion": 1.0,
+    "crecimiento": 3.0,
     "supervivencia": 0.5,
 }

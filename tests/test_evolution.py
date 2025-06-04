@@ -18,3 +18,10 @@ def test_nsga_step_population_size_constant():
     ga = NSGAII(population, lambda ag: [len(ag.genotype)])
     ga.step()
     assert len(ga.population) == 4
+
+
+def test_nsga_step_single_gene_individuals():
+    population = [BaseAgent(genotype=[i]) for i in range(4)]
+    ga = NSGAII(population, lambda ag: [len(ag.genotype)])
+    ga.step()
+    assert len(ga.population) == 4

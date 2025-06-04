@@ -81,9 +81,9 @@ class NSGAII:
 
     # --- Operadores genéticos ---
     def crossover(self, parent1, parent2):
-        if random.random() > self.crossover_rate:
-            return copy.deepcopy(parent1), copy.deepcopy(parent2)
         g1, g2 = parent1.genotype, parent2.genotype
+        if len(g1) < 2 or random.random() > self.crossover_rate:
+            return copy.deepcopy(parent1), copy.deepcopy(parent2)
         point = random.randint(1, len(g1) - 1)
         child1_genotype = g1[:point] + g2[point:]
         child2_genotype = g2[:point] + g1[point:]

@@ -9,6 +9,9 @@ from .agents.base_agent import BaseAgent
 from .agents.neural_agent import NeuralAgent
 from .evolution.genetic_algorithm import GeneticAlgorithm
 from .evolution.memetic_algorithm import MemeticNSGAII
+from concurrent.futures import ProcessPoolExecutor
+from functools import partial
+import multiprocessing
 from .evolution.fitness_functions import fitness_combinado
 from .visualization.logger import ExperimentLogger, log
 from .visualization.render import Renderer
@@ -39,6 +42,14 @@ def _evaluate_agent(agent, steps: int = 100, draw: bool=False) -> list:
     return fitness_combinado(agent)
 
 
+def _evaluate_population(population, steps: int = 100, draw: bool = False, n_jobs: int = 1):
+    if n_jobs <= 1:
+        return [_evaluate_agent(ind, steps=steps, draw=draw) for ind in population]
+    func = partial(_evaluate_agent, steps=steps, draw=draw)
+    with ProcessPoolExecutor(max_workers=n_jobs) as executor:
+        return list(executor.map(func, population))
+
+
 def train(
     population_size: int = 10,
     generations: int = 5000,
@@ -53,14 +64,15 @@ def train(
     """
     population = [NeuralAgent() for _ in range(population_size)]
     ga_cls = MemeticNSGAII if memetic else GeneticAlgorithm
-    ga = ga_cls(population, _evaluate_agent)
+    n_jobs = multiprocessing.cpu_count()
+    ga = ga_cls(population, _evaluate_agent, n_jobs=n_jobs)
     logger = ExperimentLogger()
 
     for gen in range(1, generations+1):
         if gen % 1000 == 0:
-            fitness = [_evaluate_agent(ind, draw=True) for ind in ga.population]
+            fitness = _evaluate_population(ga.population, draw=True, n_jobs=1)
         else:
-            fitness = [_evaluate_agent(ind, draw=False) for ind in ga.population]
+            fitness = _evaluate_population(ga.population, draw=False, n_jobs=ga.n_jobs)
         fronts, _ = ga.fast_non_dominated_sort(fitness)
         logger.log_fitness(gen, fitness)
         inventories = [ind.inventory for ind in ga.population]

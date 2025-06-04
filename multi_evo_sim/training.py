@@ -7,15 +7,18 @@ from .agents.neural_agent import NeuralAgent
 from .evolution.genetic_algorithm import GeneticAlgorithm
 from .evolution.fitness_functions import fitness_combinado
 from .visualization.logger import ExperimentLogger, log
+from .visualization.render import Renderer
 
 
-def _evaluate_agent(agent, steps: int = 50) -> list:
+renderer = Renderer()
+
+def _evaluate_agent(agent, steps: int = 50, draw: bool=False) -> list:
     """Ejecuta una simulaci\u00f3n corta con compa\u00f1eros y devuelve el fitness."""
     agent.inventory = 0
     agent.resources_collected = 0
     agent.shared_resources = 0
     agent.alive = True
-    agent.steps_survived = 0
+    agent.steps_survived = 0 
 
     # M\u00e1s recursos y un agente adicional permiten que se observe cooperaci\u00f3n y
     # crecimiento durante la evaluaci\u00f3n, generando fitness m\u00e1s variado.
@@ -26,6 +29,8 @@ def _evaluate_agent(agent, steps: int = 50) -> list:
     world.add_agent(BaseAgent(), position=(random.randint(0, 9), random.randint(0, 9)))
     for _ in range(steps):
         world.step()
+        if draw:
+            renderer.draw(world)
     return fitness_combinado(agent)
 
 
@@ -36,7 +41,7 @@ def train(population_size=10, generations=5):
     logger = ExperimentLogger()
 
     for gen in range(generations):
-        fitness = [_evaluate_agent(ind) for ind in ga.population]
+        fitness = [_evaluate_agent(ind, draw=True) for ind in ga.population]
         fronts, _ = ga.fast_non_dominated_sort(fitness)
         logger.log_fitness(gen, fitness)
         inventories = [ind.inventory for ind in ga.population]

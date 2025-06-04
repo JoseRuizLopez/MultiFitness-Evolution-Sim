@@ -1,7 +1,10 @@
 import numpy as np
+import logging
 
 from .base_agent import Action, ActionType, BaseAgent
 from .simple_network import SimpleNeuralNetwork
+
+logger = logging.getLogger(__name__)
 
 
 class NeuralAgent(BaseAgent):
@@ -98,5 +101,8 @@ class NeuralAgent(BaseAgent):
         if action_idx == 3:
             return Action(ActionType.MOVE, direction=(0, -1))
         if action_idx == 4:
+            logger.info(
+                "GATHER action triggered at %s", observation.get("position")
+            )
             return Action(ActionType.GATHER)
         return Action(ActionType.COOPERATE)

@@ -34,6 +34,8 @@ def train(population_size=10, generations=5):
         fitness = [_evaluate_agent(ind) for ind in ga.population]
         fronts, _ = ga.fast_non_dominated_sort(fitness)
         logger.log_fitness(gen, fitness)
+        inventories = [ind.inventory for ind in ga.population]
+        logger.log_inventory(gen, inventories)
         if fronts:
             logger.log_pareto_front(gen, fronts[0], fitness)
         log(f"Generaci\u00f3n {gen} fitness: {fitness}")

@@ -33,13 +33,34 @@ class NeuralAgent(BaseAgent):
     def _extract_features(observation):
         """Devuelve un ``numpy.ndarray`` con las características numéricas de la observación."""
         position = observation.get("position", (0, 0))
-        resource_here = observation.get("resource_here", 0)
+        resources = observation.get("resources", [])
+        resource_here = int(bool(observation.get("resource_here", 0)))
         inventory = observation.get("inventory", 0)
         danger = 1 if observation.get("danger", False) else 0
-        num_resources = len(observation.get("resources", []))
+        num_resources = len(resources)
+
+        if resources:
+            nearest = min(
+                resources,
+                key=lambda r: (r[0] - position[0]) ** 2 + (r[1] - position[1]) ** 2,
+            )
+            dx = nearest[0] - position[0]
+            dy = nearest[1] - position[1]
+        else:
+            dx = 0
+            dy = 0
 
         return np.array(
-            [position[0], position[1], resource_here, inventory, num_resources, danger],
+            [
+                position[0],
+                position[1],
+                dx,
+                dy,
+                resource_here,
+                inventory,
+                num_resources,
+                danger,
+            ],
             dtype=float,
         )
 

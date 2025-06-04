@@ -1,5 +1,8 @@
 from enum import Enum
+import logging
 import random
+
+logger = logging.getLogger(__name__)
 
 
 class ActionType(Enum):
@@ -33,6 +36,7 @@ class BaseAgent:
         moverá en una dirección aleatoria.
         """
         if observation.get("resource_here"):
+            logger.info("GATHER action triggered at %s", observation.get("position"))
             return Action(ActionType.GATHER)
 
         dx, dy = random.choice([(1, 0), (-1, 0), (0, 1), (0, -1)])

@@ -7,6 +7,13 @@
             "request": "launch",
             "module": "multi_evo_sim.main",
             "justMyCode": true
+        },
+        {
+            "name": "Python: Run training",
+            "type": "python",
+            "request": "launch",
+            "module": "multi_evo_sim.training",
+            "justMyCode": true
         }
     ]
 }

@@ -4,6 +4,7 @@ from .agents.neural_agent import NeuralAgent
 from .agents.base_agent import BaseAgent
 from .config import POPULATION_SIZE
 from .evolution.genetic_algorithm import GeneticAlgorithm
+from .evolution.memetic_algorithm import MemeeticAlgorithm
 from .evolution.fitness_functions import fitness_combinado
 from .visualization.logger import ExperimentLogger, log
 from .visualization.render import Renderer
@@ -35,7 +36,7 @@ def run_simulation():
         world.add_agent(ag, position=pos)
         renderer.draw(world)
 
-    ga = GeneticAlgorithm(population, fitness_combinado)
+    ga = MemeeticAlgorithm(population, fitness_combinado)
     fitness = ga.step()
     fronts, _ = ga.fast_non_dominated_sort(fitness)
     exp_logger.log_fitness(0, fitness)

@@ -10,7 +10,7 @@ class NeuralAgent(BaseAgent):
     def __init__(self, input_size, hidden_size=4, output_size=6, genotype=None):
         # Si se proporciona un genotipo, inicializa la red a partir de él
         network = SimpleNeuralNetwork(input_size, hidden_size, output_size, genotype)
-        super().__init__(network.genotype.tolist())
+        super().__init__(network.genotype.tolist(), color="blue")
         self.network = network
 
     def act(self, observation):

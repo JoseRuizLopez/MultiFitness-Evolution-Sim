@@ -11,8 +11,9 @@ class ActionType(Enum):
 class BaseAgent:
     """Agente base del sistema evolutivo."""
 
-    def __init__(self, genotype=None):
+    def __init__(self, genotype=None, color="red"):
         self.genotype = genotype or []
+        self.color = color
         # Cantidad de recursos recolectados por el agente
         self.inventory = 0
 

@@ -5,10 +5,12 @@ from .env.resource import Resource
 from .agents.base_agent import BaseAgent
 from .agents.neural_agent import NeuralAgent
 from .evolution.genetic_algorithm import GeneticAlgorithm
-from .evolution.memetic_algorithm import MemeeticAlgorithm
+from .evolution.memetic_algorithm import MemeticNSGAII
 from .evolution.fitness_functions import fitness_combinado
 from .visualization.logger import ExperimentLogger, log
 from .visualization.render import Renderer
+from . import config
+import argparse
 
 
 renderer = Renderer()
@@ -35,10 +37,11 @@ def _evaluate_agent(agent, steps: int = 100, draw: bool=False) -> list:
     return fitness_combinado(agent)
 
 
-def train(population_size=10, generations=1000):
-    """Lanza un proceso evolutivo sencillo con NSGA-II."""
+def train(population_size=10, generations=1000, memetic: bool = config.USE_MEMETIC_ALGORITHM):
+    """Lanza un proceso evolutivo con NSGA-II o MemeticNSGAII."""
     population = [NeuralAgent() for _ in range(population_size)]
-    ga = MemeeticAlgorithm(population, _evaluate_agent)
+    ga_cls = MemeticNSGAII if memetic else GeneticAlgorithm
+    ga = ga_cls(population, _evaluate_agent)
     logger = ExperimentLogger()
 
     for gen in range(1, generations+1):
@@ -59,4 +62,11 @@ def train(population_size=10, generations=1000):
 
 
 if __name__ == "__main__":
-    train()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--memetic",
+        action="store_true",
+        help="Usar MemeticNSGAII en lugar de GeneticAlgorithm",
+    )
+    args = parser.parse_args()
+    train(memetic=args.memetic or config.USE_MEMETIC_ALGORITHM)

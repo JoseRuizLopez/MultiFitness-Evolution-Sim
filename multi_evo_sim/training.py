@@ -41,7 +41,7 @@ def _evaluate_agent(agent, steps: int = 100, draw: bool=False) -> list:
 
 def train(
     population_size: int = 10,
-    generations: int = 1000,
+    generations: int = 5000,
     memetic: bool = config.USE_MEMETIC_ALGORITHM,
     best_path: str = "best_genotype.npy",
 ):
@@ -57,7 +57,7 @@ def train(
     logger = ExperimentLogger()
 
     for gen in range(1, generations+1):
-        if gen % 500 == 0:
+        if gen % 1000 == 0:
             fitness = [_evaluate_agent(ind, draw=True) for ind in ga.population]
         else:
             fitness = [_evaluate_agent(ind, draw=False) for ind in ga.population]

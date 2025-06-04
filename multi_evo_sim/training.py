@@ -1,5 +1,8 @@
 import random
 
+import argparse
+import numpy as np
+
 from .env.world import World
 from .env.resource import Resource
 from .agents.base_agent import BaseAgent
@@ -10,7 +13,6 @@ from .evolution.fitness_functions import fitness_combinado
 from .visualization.logger import ExperimentLogger, log
 from .visualization.render import Renderer
 from . import config
-import argparse
 
 
 renderer = Renderer()
@@ -37,8 +39,18 @@ def _evaluate_agent(agent, steps: int = 100, draw: bool=False) -> list:
     return fitness_combinado(agent)
 
 
-def train(population_size=10, generations=5000, memetic: bool = config.USE_MEMETIC_ALGORITHM):
-    """Lanza un proceso evolutivo con NSGA-II o MemeticNSGAII."""
+def train(
+    population_size: int = 10,
+    generations: int = 5000,
+    memetic: bool = config.USE_MEMETIC_ALGORITHM,
+    best_path: str = "best_genotype.npy",
+):
+    """Lanza un proceso evolutivo con NSGA-II o MemeticNSGAII.
+
+    Además de registrar estadísticas en CSV, al finalizar guarda el
+    genotipo del individuo con mejor fitness en ``best_path`` para
+    poder reutilizarlo posteriormente.
+    """
     population = [NeuralAgent() for _ in range(population_size)]
     ga_cls = MemeticNSGAII if memetic else GeneticAlgorithm
     ga = ga_cls(population, _evaluate_agent)
@@ -60,6 +72,13 @@ def train(population_size=10, generations=5000, memetic: bool = config.USE_MEMET
 
     logger.save()
 
+    if 'fitness' in locals() and fitness:
+        best_idx = max(
+            range(len(fitness)),
+            key=lambda i: fitness[i][0] if isinstance(fitness[i], (list, tuple)) else fitness[i],
+        )
+        np.save(best_path, ga.population[best_idx].genotype)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -68,5 +87,14 @@ if __name__ == "__main__":
         action="store_true",
         help="Usar MemeticNSGAII en lugar de GeneticAlgorithm",
     )
+    parser.add_argument(
+        "--best-path",
+        type=str,
+        default="best_genotype.npy",
+        help="Ruta para guardar el genotipo con mejor fitness",
+    )
     args = parser.parse_args()
-    train(memetic=args.memetic or config.USE_MEMETIC_ALGORITHM)
+    train(
+        memetic=args.memetic or config.USE_MEMETIC_ALGORITHM,
+        best_path=args.best_path,
+    )

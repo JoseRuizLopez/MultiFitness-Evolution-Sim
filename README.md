@@ -153,7 +153,10 @@ multi_evo_sim/
 
    Durante el entrenamiento se guardan tres archivos CSV: `fitness_log.csv`,
    `pareto_front.csv` e `inventory_log.csv`, donde este último almacena el
-   inventario final de cada agente en cada generación.
+   inventario final de cada agente en cada generación. Además se crea el
+   fichero `best_genotype.npy` con el vector de pesos del individuo que
+   obtuvo el mejor fitness al finalizar, para poder reproducir su
+   comportamiento en ejecuciones posteriores.
 
 El archivo `multi_evo_sim/config.py` contiene parámetros globales como el tamaño
 del mundo, el número de agentes inicial y los pesos de cada métrica de fitness.

@@ -4,9 +4,13 @@ POPULATION_SIZE = 10
 
 # Pesos para las distintas métricas de fitness
 FITNESS_WEIGHTS = {
-    "eficiencia": 1.0,
-    "diversidad_genetica": 1.0,
-    "cooperacion": 1.0,
-    "crecimiento": 1.0,
-    "supervivencia": 1.0,
+    # Las métricas que tienden a permanecer constantes en simulaciones
+    # cortas reciben un peso menor para evitar que dominen el fitness
+    # total. Se da mayor importancia a la cooperación y al crecimiento
+    # para observar variaciones significativas.
+    "eficiencia": 0.5,
+    "diversidad_genetica": 0.5,
+    "cooperacion": 2.0,
+    "crecimiento": 2.0,
+    "supervivencia": 0.5,
 }

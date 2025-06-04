@@ -151,3 +151,12 @@ multi_evo_sim/
 El archivo `multi_evo_sim/config.py` contiene parámetros globales como el tamaño
 del mundo, el número de agentes inicial y los pesos de cada métrica de fitness.
 Modifica estos valores para experimentar con diferentes configuraciones.
+
+## Entrenamiento de agentes
+
+En esta versión se ha ajustado el diccionario `FITNESS_WEIGHTS` en
+`multi_evo_sim/config.py` para dar más peso a las métricas de
+`crecimiento` y `cooperacion`. Al reducir la influencia de
+`eficiencia`, `diversidad_genetica` y `supervivencia`, el entrenamiento
+refleja mejor las variaciones en la recolección y el intercambio de
+recursos durante simulaciones cortas.

@@ -26,12 +26,13 @@ class Renderer:
                     y += 0.5
                 self.ax.scatter(x, y, c="green", s=100, marker="s")
 
-        for _, pos in world.agents:
+        for agent, pos in world.agents:
             x, y = pos
             if world.grid:
                 x += 0.5
                 y += 0.5
-            self.ax.scatter(x, y, c="red", s=100, marker="o")
+            color = getattr(agent, "color", "red")
+            self.ax.scatter(x, y, c=color, s=100, marker="o")
 
         self.ax.set_title("Simulación")
         plt.draw()

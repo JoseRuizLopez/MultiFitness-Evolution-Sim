@@ -88,3 +88,6 @@ class MemeticNSGAII(NSGAII):
                 new_population.extend([combined[i] for i in front])
         self.population = new_population
         return combined_fitness
+
+# Retrocompatibilidad con la implementación previa
+MemeeticAlgorithm = MemeticNSGAII

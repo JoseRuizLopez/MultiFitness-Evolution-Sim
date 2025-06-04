@@ -5,6 +5,7 @@ from .env.resource import Resource
 from .agents.base_agent import BaseAgent
 from .agents.neural_agent import NeuralAgent
 from .evolution.genetic_algorithm import GeneticAlgorithm
+from .evolution.memetic_algorithm import MemeeticAlgorithm
 from .evolution.fitness_functions import fitness_combinado
 from .visualization.logger import ExperimentLogger, log
 from .visualization.render import Renderer
@@ -20,12 +21,12 @@ def _evaluate_agent(agent, steps: int = 100, draw: bool=False) -> list:
     agent.alive = True
     agent.steps_survived = 0 
 
-    # M\u00e1s recursos y un agente adicional permiten que se observe cooperaci\u00f3n y
-    # crecimiento durante la evaluaci\u00f3n, generando fitness m\u00e1s variado.
+    # Mas recursos y un agente adicional permiten que se observe cooperacon y
+    # crecimiento durante la evaluacion, generando fitness mas variado.
     resources = [Resource((random.randint(0, 9), random.randint(0, 9))) for _ in range(10)]
     world = World(width=10, height=10, resources=resources)
     world.add_agent(agent, position=(random.randint(0, 9), random.randint(0, 9)))
-    # Agregar un compa\u00f1ero b\u00e1sico para posibilitar acciones de cooperaci\u00f3n
+    # Agregar un compañero basico para posibilitar acciones de cooperacion
     world.add_agent(BaseAgent(), position=(random.randint(0, 9), random.randint(0, 9)))
     for _ in range(steps):
         world.step()
@@ -34,14 +35,17 @@ def _evaluate_agent(agent, steps: int = 100, draw: bool=False) -> list:
     return fitness_combinado(agent)
 
 
-def train(population_size=10, generations=5):
+def train(population_size=10, generations=1000):
     """Lanza un proceso evolutivo sencillo con NSGA-II."""
     population = [NeuralAgent() for _ in range(population_size)]
-    ga = GeneticAlgorithm(population, _evaluate_agent)
+    ga = MemeeticAlgorithm(population, _evaluate_agent)
     logger = ExperimentLogger()
 
-    for gen in range(generations):
-        fitness = [_evaluate_agent(ind, draw=True) for ind in ga.population]
+    for gen in range(1, generations+1):
+        if gen % 500 == 0:
+            fitness = [_evaluate_agent(ind, draw=True) for ind in ga.population]
+        else:
+            fitness = [_evaluate_agent(ind, draw=False) for ind in ga.population]
         fronts, _ = ga.fast_non_dominated_sort(fitness)
         logger.log_fitness(gen, fitness)
         inventories = [ind.inventory for ind in ga.population]

@@ -93,6 +93,8 @@ class NSGAII:
         for i, gene in enumerate(individual.genotype):
             if random.random() < self.mutation_rate:
                 individual.genotype[i] = gene + random.uniform(-0.1, 0.1)
+        if hasattr(individual, "update_network"):
+            individual.update_network()
         return individual
 
     # --- Ciclo principal de una generación ---

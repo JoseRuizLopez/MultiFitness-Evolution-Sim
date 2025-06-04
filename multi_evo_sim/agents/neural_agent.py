@@ -20,6 +20,15 @@ class NeuralAgent(BaseAgent):
         super().__init__(network.genotype.tolist(), color="blue")
         self.network = network
 
+    def update_network(self):
+        """Rebuild ``self.network`` from ``self.genotype``."""
+        self.network = SimpleNeuralNetwork(
+            self.network.input_size,
+            self.network.hidden_size,
+            self.network.output_size,
+            self.genotype,
+        )
+
     @staticmethod
     def _extract_features(observation):
         """Devuelve un ``numpy.ndarray`` con las características numéricas de la observación."""

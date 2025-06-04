@@ -45,6 +45,8 @@ Para manejar múltiples objetivos sin necesidad de convertirlos en una única m�
 
 Implementable desde cero o usando pymoo.
 Se incluye una versión simplificada de NSGA-II para evolucionar la población.
+Además, el módulo `MemeticNSGAII` incorpora una fase de búsqueda local ligera
+que mejora cada descendiente antes de la selección ambiental.
 
 ### Métricas de recompensa posibles
 

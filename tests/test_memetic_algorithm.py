@@ -23,3 +23,16 @@ def test_memetic_elitism_keeps_best_individual():
     best = max(population, key=lambda ag: ag.genotype[0] + ag.genotype[1]).genotype[:]
     ga.step()
     assert any(ind.genotype == best for ind in ga.population)
+
+
+def test_memetic_elitism_persists_over_generations():
+    import random
+
+    random.seed(0)
+    population = [BaseAgent(genotype=[i, i]) for i in range(4)]
+    fitness = lambda ag: [ag.genotype[0] + ag.genotype[1]]
+    ga = MemeticNSGAII(population, fitness, mutation_rate=0.0, local_search_iters=0)
+    best = max(population, key=lambda ag: ag.genotype[0] + ag.genotype[1]).genotype[:]
+    for _ in range(5):
+        ga.step()
+    assert any(ind.genotype == best for ind in ga.population)

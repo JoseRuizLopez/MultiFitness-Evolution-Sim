@@ -86,11 +86,16 @@ class World:
         return False
 
     def step(self):
-        """Avanza un tick en el mundo."""
+        """Avanza un tick en el mundo y actualiza m\u00e9tricas b\u00e1sicas."""
         for idx, (agent, position) in enumerate(self.agents):
+            if not getattr(agent, "alive", True):
+                continue
             observation = self.observe(agent, position)
             action = agent.act(observation)
             new_position = self.apply_action(agent, position, action)
+            agent.steps_survived = getattr(agent, "steps_survived", 0) + 1
+            if self.is_danger(new_position):
+                agent.alive = False
             self.agents[idx] = (agent, new_position)
 
         if self.resource_regen:
@@ -134,7 +139,9 @@ class World:
         if action.type == ActionType.GATHER:
             for res in self.resources:
                 if res.position == position and not res.consumed:
-                    agent.inventory += res.consume()
+                    value = res.consume()
+                    agent.inventory += value
+                    agent.resources_collected = getattr(agent, "resources_collected", 0) + value
                     break
             return position
 
@@ -143,6 +150,7 @@ class World:
                 if other is not agent and other_pos == position and agent.inventory > 0:
                     other.inventory += 1
                     agent.inventory -= 1
+                    agent.shared_resources = getattr(agent, "shared_resources", 0) + 1
             return position
 
         return position

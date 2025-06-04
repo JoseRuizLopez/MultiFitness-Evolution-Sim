@@ -138,6 +138,12 @@ multi_evo_sim/
    python -m multi_evo_sim.main
    ```
 
+4. Inicia el proceso de entrenamiento evolutivo:
+
+   ```bash
+   python -m multi_evo_sim.training
+   ```
+
 El archivo `multi_evo_sim/config.py` contiene parámetros globales como el tamaño
 del mundo, el número de agentes inicial y los pesos de cada métrica de fitness.
 Modifica estos valores para experimentar con diferentes configuraciones.

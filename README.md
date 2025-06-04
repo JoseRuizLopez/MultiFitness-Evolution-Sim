@@ -138,6 +138,16 @@ multi_evo_sim/
    python -m multi_evo_sim.main
    ```
 
+4. Inicia el proceso de entrenamiento evolutivo:
+
+   ```bash
+   python -m multi_evo_sim.training
+   ```
+
+   Durante el entrenamiento se guardan tres archivos CSV: `fitness_log.csv`,
+   `pareto_front.csv` e `inventory_log.csv`, donde este último almacena el
+   inventario final de cada agente en cada generación.
+
 El archivo `multi_evo_sim/config.py` contiene parámetros globales como el tamaño
 del mundo, el número de agentes inicial y los pesos de cada métrica de fitness.
 Modifica estos valores para experimentar con diferentes configuraciones.

@@ -46,7 +46,7 @@ class MemeticNSGAII(NSGAII):
         return best
 
     def step(self):
-        """Ejecuta un paso evolutivo con búsqueda local."""
+        """Ejecuta un paso evolutivo con búsqueda local y elitismo."""
         fitness = [self.fitness_fn(ind) for ind in self.population]
         fronts, ranks = self.fast_non_dominated_sort(fitness)
         crowding = [0.0] * len(self.population)
@@ -54,6 +54,10 @@ class MemeticNSGAII(NSGAII):
             distances = self.crowding_distance(front, fitness)
             for idx, d in zip(front, distances):
                 crowding[idx] = d
+
+        # Identificar el mejor individuo actual para garantizar elitismo
+        best_idx = min(range(len(self.population)), key=lambda i: (ranks[i], -crowding[i]))
+        elite = copy.deepcopy(self.population[best_idx])
 
         offspring = []
         while len(offspring) < len(self.population):
@@ -86,6 +90,19 @@ class MemeticNSGAII(NSGAII):
                 break
             else:
                 new_population.extend([combined[i] for i in front])
+
+        # Asegurar que el mejor individuo permanezca en la población
+        if not any(ind.genotype == elite.genotype for ind in new_population):
+            np_fitness = [self.fitness_fn(ind) for ind in new_population]
+            np_fronts, np_ranks = self.fast_non_dominated_sort(np_fitness)
+            np_crowding = [0.0] * len(new_population)
+            for front in np_fronts:
+                distances = self.crowding_distance(front, np_fitness)
+                for idx, d in zip(front, distances):
+                    np_crowding[idx] = d
+            worst_idx = max(range(len(new_population)), key=lambda i: (np_ranks[i], -np_crowding[i]))
+            new_population[worst_idx] = elite
+
         self.population = new_population
         return combined_fitness
 

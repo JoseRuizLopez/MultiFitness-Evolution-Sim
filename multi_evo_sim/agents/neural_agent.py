@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 class NeuralAgent(BaseAgent):
     """Agente que utiliza una red neuronal simple como política."""
 
-    def __init__(self, input_size=None, hidden_size=4, output_size=6, genotype=None):
+    def __init__(self, input_size=None, hidden_size=8, output_size=6, genotype=None):
         """Crea un ``NeuralAgent`` con una red neuronal mínima.
 
         Si ``input_size`` es ``None`` se calcula automáticamente a partir del
@@ -37,6 +37,8 @@ class NeuralAgent(BaseAgent):
         """Devuelve un ``numpy.ndarray`` con las características numéricas de la observación."""
         position = observation.get("position", (0, 0))
         resources = observation.get("resources", [])
+        other_agents = observation.get("agents", [])
+        obstacles = observation.get("obstacles", [])
         resource_here = int(bool(observation.get("resource_here", 0)))
         inventory = observation.get("inventory", 0)
         danger = 1 if observation.get("danger", False) else 0
@@ -53,6 +55,36 @@ class NeuralAgent(BaseAgent):
             dx = 0
             dy = 0
 
+        if other_agents:
+            nearest_agent = min(
+                other_agents,
+                key=lambda a: (a[0] - position[0]) ** 2 + (a[1] - position[1]) ** 2,
+            )
+            ax = nearest_agent[0] - position[0]
+            ay = nearest_agent[1] - position[1]
+            dist_agent = np.hypot(ax, ay)
+        else:
+            dist_agent = 0
+
+        if obstacles:
+            def _center(o):
+                if len(o) == 2:
+                    return o
+                return ((o[0] + o[2]) / 2, (o[1] + o[3]) / 2)
+
+            nearest_obstacle = min(
+                obstacles,
+                key=lambda o: (
+                    _center(o)[0] - position[0]
+                ) ** 2 + (_center(o)[1] - position[1]) ** 2,
+            )
+            cx, cy = _center(nearest_obstacle)
+            ox = cx - position[0]
+            oy = cy - position[1]
+            dist_obstacle = np.hypot(ox, oy)
+        else:
+            dist_obstacle = 0
+
         return np.array(
             [
                 position[0],
@@ -63,6 +95,8 @@ class NeuralAgent(BaseAgent):
                 inventory,
                 num_resources,
                 danger,
+                dist_agent,
+                dist_obstacle,
             ],
             dtype=float,
         )

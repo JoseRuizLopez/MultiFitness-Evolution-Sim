@@ -7,7 +7,7 @@ class NSGAII:
     """Implementación muy simplificada del algoritmo NSGA-II."""
 
     def __init__(self, population: List, fitness_fn: Callable, crossover_rate: float = 0.9,
-                 mutation_rate: float = 0.1):
+                 mutation_rate: float = 0.2):
         self.population = population
         self.fitness_fn = fitness_fn
         self.crossover_rate = crossover_rate
@@ -92,7 +92,7 @@ class NSGAII:
     def mutate(self, individual):
         for i, gene in enumerate(individual.genotype):
             if random.random() < self.mutation_rate:
-                individual.genotype[i] = gene + random.uniform(-0.1, 0.1)
+                individual.genotype[i] = gene + random.uniform(-0.2, 0.2)
         if hasattr(individual, "update_network"):
             individual.update_network()
         return individual

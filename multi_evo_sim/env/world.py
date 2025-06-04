@@ -109,12 +109,15 @@ class World:
         resource_here = any(
             r.position == position and not r.consumed for r in self.resources
         )
+        other_agents = [pos for a, pos in self.agents if a is not agent]
         return {
             "position": position,
             "resource_here": int(resource_here),
             "inventory": agent.inventory,
             "resources": [r.position for r in self.resources if not r.consumed],
             "danger": self.is_danger(position),
+            "agents": other_agents,
+            "obstacles": self.obstacles,
         }
 
     def apply_action(self, agent, position, action):

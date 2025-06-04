@@ -135,8 +135,8 @@ class NeuralAgent(BaseAgent):
         if action_idx == 3:
             return Action(ActionType.MOVE, direction=(0, -1))
         if action_idx == 4:
-            logger.info(
-                "GATHER action triggered at %s", observation.get("position")
-            )
+            # logger.info(
+            #     "GATHER action triggered at %s", observation.get("position")
+            # )
             return Action(ActionType.GATHER)
         return Action(ActionType.COOPERATE)

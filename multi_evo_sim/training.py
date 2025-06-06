@@ -58,8 +58,8 @@ def _evaluate_population(population, steps: int = 100, draw: bool = False, n_job
 
 
 def train(
-    population_size: int = 10,
-    generations: int = 5000,
+    population_size: int = 18,
+    generations: int = 10000,
     memetic: bool = config.USE_MEMETIC_ALGORITHM,
     best_path: str = "best_genotype.npy",
 ):
@@ -76,7 +76,7 @@ def train(
     logger = ExperimentLogger()
 
     for gen in range(1, generations+1):
-        if gen % 1000 == 0:
+        if gen % 5000 == 0:
             fitness = _evaluate_population(ga.population, draw=True, n_jobs=1)
         else:
             fitness = _evaluate_population(ga.population, draw=False, n_jobs=ga.n_jobs)

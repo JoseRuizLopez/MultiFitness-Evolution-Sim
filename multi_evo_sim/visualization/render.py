@@ -34,6 +34,13 @@ class Renderer:
             color = getattr(agent, "color", "red")
             self.ax.scatter(x, y, c=color, s=100, marker="o")
 
+        if getattr(world, "last_coop", None) is not None:
+            x, y = world.last_coop
+            if world.grid:
+                x += 0.5
+                y += 0.5
+            self.ax.scatter(x, y, c="purple", s=150, marker="*")
+
         self.ax.set_title("Simulación")
         plt.draw()
         plt.pause(0.001)

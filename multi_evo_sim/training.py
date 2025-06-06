@@ -9,9 +9,9 @@ from .agents.base_agent import BaseAgent
 from .agents.neural_agent import NeuralAgent
 from .evolution.genetic_algorithm import GeneticAlgorithm
 from .evolution.memetic_algorithm import MemeticNSGAII
-from concurrent.futures import ProcessPoolExecutor
 from functools import partial
 import multiprocessing
+from .utils.process_pool import get_pool
 from .evolution.fitness_functions import fitness_combinado
 from .visualization.logger import ExperimentLogger, log
 from .visualization.render import Renderer
@@ -52,9 +52,9 @@ def _evaluate_agent(agent, steps: int = 100, draw: bool=False) -> list:
 def _evaluate_population(population, steps: int = 100, draw: bool = False, n_jobs: int = 1):
     if n_jobs <= 1:
         return [_evaluate_agent(ind, steps=steps, draw=draw) for ind in population]
+    pool = get_pool(n_jobs)
     func = partial(_evaluate_agent, steps=steps, draw=draw)
-    with ProcessPoolExecutor(max_workers=n_jobs) as executor:
-        return list(executor.map(func, population))
+    return list(pool.map(func, population))
 
 
 def train(

@@ -123,7 +123,7 @@ multi_evo_sim/
 - Generación automática de estrategias sorprendentes (emergentes).
 
 - Guardar videos de los dibujos generados de matplotlib.
-- Indicar en el titulo del plot, el número de la población que es.
+- Indicar en el título del plot la generación actual (implementado).
 - Representar visualmente en el plot cada vez que se comparten recursos.
 - Añadir zonas de peligro.
 - Sustituir el agente basico aleatorio por otro agente neuronal, que comparten entrenamiento (para que se tenga en cuenta o no, a la hora de realizar el fitness).

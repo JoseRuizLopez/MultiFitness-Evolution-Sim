@@ -1,12 +1,29 @@
+import logging
 import matplotlib.pyplot as plt
+from matplotlib.animation import FFMpegWriter, writers
 
 
 class Renderer:
     """Renderiza el mundo y los agentes utilizando matplotlib."""
 
-    def __init__(self):
+    def __init__(self, record: bool = False, video_path: str = "sim.mp4"):
         plt.ion()
         self.fig, self.ax = plt.subplots()
+        self.record = record
+        self.writer = None
+        if self.record:
+            if writers.is_available("ffmpeg"):
+                self.writer = FFMpegWriter(fps=10)
+                try:
+                    self.writer.setup(self.fig, video_path)
+                except FileNotFoundError:
+                    logging.warning("No se encontró FFmpeg. Desactivando grabación.")
+                    self.record = False
+                    self.writer = None
+            else:
+                logging.warning("FFmpeg no está disponible. Desactivando grabación.")
+                self.record = False
+
 
     def draw(self, world):
         """Dibuja el estado actual del mundo."""
@@ -44,3 +61,11 @@ class Renderer:
         self.ax.set_title("Simulación")
         plt.draw()
         plt.pause(0.001)
+        if self.record and self.writer:
+            self.writer.grab_frame()
+
+    def close(self):
+        """Finaliza la grabación y cierra el writer."""
+        if self.writer:
+            self.writer.finish()
+            self.writer = None

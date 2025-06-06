@@ -122,7 +122,10 @@ multi_evo_sim/
 - Visualización de frentes de Pareto en recompensas.
 - Generación automática de estrategias sorprendentes (emergentes).
 
-- Guardar videos de los dibujos generados de matplotlib.
+- Guardar videos de los dibujos generados de matplotlib. Para ello
+  puedes crear ``Renderer(record=True, video_path="salida.mp4")`` o
+  ejecutar los módulos ``main`` o ``training`` con la opción ``--record``.
+- Para grabar es necesario tener **FFmpeg** instalado y accesible desde la línea de comandos. Si no se encuentra, la grabación se desactivará y se mostrará una advertencia.
 - Indicar en el titulo del plot, el número de la población que es.
 - Representar visualmente en el plot cada vez que se comparten recursos.
 - Añadir zonas de peligro.
@@ -136,6 +139,7 @@ multi_evo_sim/
    ```bash
    pip install -r requirements.txt
    ```
+   Para la opción de grabar vídeo también debes tener **FFmpeg** instalado y disponible en el ``PATH``.
 
 2. Ejecuta los tests:
     ```bash
@@ -145,13 +149,13 @@ multi_evo_sim/
 3. Ejecuta la simulación básica:
 
    ```bash
-   python -m multi_evo_sim.main
+   python -m multi_evo_sim.main --record --video-path salida.mp4
    ```
 
 4. Inicia el proceso de entrenamiento evolutivo:
 
    ```bash
-   python -m multi_evo_sim.training
+   python -m multi_evo_sim.training --record --video-path entrenamiento.mp4
    ```
 
    Si deseas utilizar el algoritmo memético `MemeticNSGAII`, ejecuta el módulo

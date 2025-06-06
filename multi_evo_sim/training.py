@@ -20,11 +20,14 @@ from . import config
 
 # Renderer instance created lazily to avoid opening windows in worker processes
 renderer = None
+# Parámetros de grabación
+_record = False
+_video_path = "sim.mp4"
 
 def _get_renderer():
     global renderer
     if renderer is None:
-        renderer = Renderer()
+        renderer = Renderer(record=_record, video_path=_video_path)
     return renderer
 
 def _evaluate_agent(agent, steps: int = 100, draw: bool=False) -> list:
@@ -58,8 +61,8 @@ def _evaluate_population(population, steps: int = 100, draw: bool = False, n_job
 
 
 def train(
-    population_size: int = 18,
-    generations: int = 10000,
+    population_size: int = 2,
+    generations: int = 20,
     memetic: bool = config.USE_MEMETIC_ALGORITHM,
     best_path: str = "best_genotype.npy",
 ):
@@ -76,7 +79,7 @@ def train(
     logger = ExperimentLogger()
 
     for gen in range(1, generations+1):
-        if gen % 2500 == 0:
+        if gen % 10 == 0:
             fitness = _evaluate_population(ga.population, draw=True, n_jobs=1)
         else:
             fitness = _evaluate_population(ga.population, draw=False, n_jobs=ga.n_jobs)
@@ -90,6 +93,9 @@ def train(
         ga.step()
 
     logger.save()
+
+    if renderer is not None:
+        renderer.close()
 
     if 'fitness' in locals() and fitness:
         best_idx = max(
@@ -112,7 +118,20 @@ if __name__ == "__main__":
         default="best_genotype.npy",
         help="Ruta para guardar el genotipo con mejor fitness",
     )
+    parser.add_argument(
+        "--record",
+        action="store_true",
+        help="Guardar un video de la simulación de evaluación",
+    )
+    parser.add_argument(
+        "--video-path",
+        type=str,
+        default="sim.mp4",
+        help="Ruta del archivo de video a generar",
+    )
     args = parser.parse_args()
+    _record = args.record
+    _video_path = args.video_path
     train(
         memetic=args.memetic or config.USE_MEMETIC_ALGORITHM,
         best_path=args.best_path,

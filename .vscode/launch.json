@@ -6,6 +6,11 @@
             "type": "python",
             "request": "launch",
             "module": "multi_evo_sim.main",
+            "args": [
+                "--record",
+                "--video-path",
+                "sim.mp4"
+            ],
             "justMyCode": true
         },
         {
@@ -13,6 +18,11 @@
             "type": "python",
             "request": "launch",
             "module": "multi_evo_sim.training",
+            "args": [
+                "--record",
+                "--video-path",
+                "training.mp4"
+            ],
             "justMyCode": true
         },
         {

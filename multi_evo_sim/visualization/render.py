@@ -1,5 +1,6 @@
+import logging
 import matplotlib.pyplot as plt
-from matplotlib.animation import FFMpegWriter
+from matplotlib.animation import FFMpegWriter, writers
 
 
 class Renderer:
@@ -11,8 +12,14 @@ class Renderer:
         self.record = record
         self.writer = None
         if self.record:
-            self.writer = FFMpegWriter(fps=10)
-            self.writer.setup(self.fig, video_path)
+            if writers.is_available("ffmpeg"):
+                self.writer = FFMpegWriter(fps=10)
+                self.writer.setup(self.fig, video_path)
+            else:
+                logging.warning(
+                    "FFmpeg no est\u00e1 disponible. Desactivando grabaci\u00f3n."
+                )
+                self.record = False
 
     def draw(self, world):
         """Dibuja el estado actual del mundo."""

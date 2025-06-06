@@ -19,6 +19,8 @@ def test_world_step_gather():
 
 
 def test_last_coop_updates_on_cooperate():
+    """Comprueba que tras cooperar se actualiza ``world.last_coop``."""
+
     class CoopAgent(BaseAgent):
         def act(self, _obs):
             return Action(ActionType.COOPERATE)

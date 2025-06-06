@@ -1,12 +1,18 @@
 import matplotlib.pyplot as plt
+from matplotlib.animation import FFMpegWriter
 
 
 class Renderer:
     """Renderiza el mundo y los agentes utilizando matplotlib."""
 
-    def __init__(self):
+    def __init__(self, record: bool = False, video_path: str = "sim.mp4"):
         plt.ion()
         self.fig, self.ax = plt.subplots()
+        self.record = record
+        self.writer = None
+        if self.record:
+            self.writer = FFMpegWriter(fps=10)
+            self.writer.setup(self.fig, video_path)
 
     def draw(self, world):
         """Dibuja el estado actual del mundo."""
@@ -37,3 +43,11 @@ class Renderer:
         self.ax.set_title("Simulación")
         plt.draw()
         plt.pause(0.001)
+        if self.record and self.writer:
+            self.writer.grab_frame()
+
+    def close(self):
+        """Finaliza la grabación y cierra el writer."""
+        if self.writer:
+            self.writer.finish()
+            self.writer = None

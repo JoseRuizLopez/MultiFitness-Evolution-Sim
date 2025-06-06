@@ -130,7 +130,6 @@ if __name__ == "__main__":
         help="Ruta del archivo de video a generar",
     )
     args = parser.parse_args()
-    global _record, _video_path
     _record = args.record
     _video_path = args.video_path
     train(

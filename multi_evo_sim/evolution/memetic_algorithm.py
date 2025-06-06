@@ -114,4 +114,4 @@ class MemeticNSGAII(NSGAII):
         return combined_fitness
 
 # Retrocompatibilidad con la implementación previa
-MemeeticAlgorithm = MemeticNSGAII
+MemeticAlgorithm = MemeticNSGAII

@@ -8,8 +8,11 @@ class Renderer:
         plt.ion()
         self.fig, self.ax = plt.subplots()
 
-    def draw(self, world):
-        """Dibuja el estado actual del mundo."""
+    def draw(self, world, generation: int | None = None):
+        """Dibuja el estado actual del mundo.
+
+        Si se proporciona ``generation`` muestra el n\u00famero en el t\u00edtulo.
+        """
         self.ax.clear()
         self.ax.set_xlim(0, world.width)
         self.ax.set_ylim(0, world.height)
@@ -34,6 +37,9 @@ class Renderer:
             color = getattr(agent, "color", "red")
             self.ax.scatter(x, y, c=color, s=100, marker="o")
 
-        self.ax.set_title("Simulación")
+        if generation is not None:
+            self.ax.set_title(f"Simulación - generación {generation}")
+        else:
+            self.ax.set_title("Simulación")
         plt.draw()
         plt.pause(0.001)

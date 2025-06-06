@@ -22,19 +22,19 @@ def run_simulation():
 
     # Mundo con un recurso inicial en (0, 0)
     world = World(width=10, height=10, resources=[Resource((0, 0))])
-    renderer.draw(world)
+    renderer.draw(world, generation=0)
 
     # Agente individual para prueba rápida (NeuralAgent)
     agent = NeuralAgent()
     world.add_agent(agent, position=(0, 0))
-    renderer.draw(world)
+    renderer.draw(world, generation=0)
 
     # O alternativamente: población evolutiva
     population = [random_agent() for _ in range(POPULATION_SIZE)]
     for ag in population:
         pos = (random.randint(0, world.width - 1), random.randint(0, world.height - 1))
         world.add_agent(ag, position=pos)
-        renderer.draw(world)
+        renderer.draw(world, generation=0)
 
     ga = MemeticAlgorithm(population, fitness_combinado)
     fitness = ga.step()
@@ -47,7 +47,7 @@ def run_simulation():
     # Ejecutar un paso en el mundo para que los agentes actúen
     for step in range(200):
         world.step()
-        renderer.draw(world)
+        renderer.draw(world, generation=0)
     for ag in population:
         log(f"Inventario del agente: {ag.inventory}")
     log(f"Inventario del agente individual (Neural): {agent.inventory}")

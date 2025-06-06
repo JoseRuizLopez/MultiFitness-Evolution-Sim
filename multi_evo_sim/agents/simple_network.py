@@ -2,7 +2,7 @@ import numpy as np
 
 
 class SimpleNeuralNetwork:
-    """Minimal two-layer neural network using numpy."""
+    """Red neuronal de dos capas implementada con numpy."""
 
     def __init__(self, input_size, hidden_size, output_size, genotype=None):
         self.input_size = input_size

@@ -24,7 +24,7 @@ class NeuralAgent(BaseAgent):
         self.network = network
 
     def update_network(self):
-        """Rebuild ``self.network`` from ``self.genotype``."""
+        """Reconstruye ``self.network`` a partir de ``self.genotype``."""
         self.network = SimpleNeuralNetwork(
             self.network.input_size,
             self.network.hidden_size,

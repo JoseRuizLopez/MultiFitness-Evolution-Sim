@@ -1,4 +1,4 @@
-"""Shared process pool for parallel evaluation."""
+"""Pool de procesos compartido para la evaluación paralela."""
 from concurrent.futures import ProcessPoolExecutor
 from typing import Optional
 import atexit
@@ -6,7 +6,7 @@ import atexit
 _pool: Optional[ProcessPoolExecutor] = None
 
 def get_pool(n_jobs: int) -> ProcessPoolExecutor:
-    """Return a global ``ProcessPoolExecutor`` with ``n_jobs`` workers."""
+    """Devuelve un ``ProcessPoolExecutor`` global con ``n_jobs`` trabajadores."""
     global _pool
     if n_jobs <= 1:
         raise ValueError("n_jobs must be greater than 1 for a pool")
@@ -17,7 +17,7 @@ def get_pool(n_jobs: int) -> ProcessPoolExecutor:
 
 
 def shutdown_pool() -> None:
-    """Shutdown the global process pool if it exists."""
+    """Cierra el pool de procesos global si existe."""
     global _pool
     if _pool is not None:
         _pool.shutdown()

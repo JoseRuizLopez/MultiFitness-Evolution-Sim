@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 
 
 class Renderer:
@@ -17,6 +18,15 @@ class Renderer:
             self.ax.set_xticks(range(world.width + 1))
             self.ax.set_yticks(range(world.height + 1))
             self.ax.grid(True, which="both")
+
+        for zone in world.danger_zones:
+            if world.grid:
+                x, y = zone
+                rect = Rectangle((x, y), 1, 1, color="red", alpha=0.3)
+            else:
+                x1, y1, x2, y2 = zone
+                rect = Rectangle((x1, y1), x2 - x1, y2 - y1, color="red", alpha=0.3)
+            self.ax.add_patch(rect)
 
         for res in world.resources:
             if not res.consumed:

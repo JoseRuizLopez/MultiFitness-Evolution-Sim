@@ -39,6 +39,8 @@ def _evaluate_agent(agent, steps: int = 100, draw: bool=False) -> list:
     # crecimiento durante la evaluacion, generando fitness mas variado.
     resources = [Resource((random.randint(0, 9), random.randint(0, 9))) for _ in range(10)]
     world = World(width=10, height=10, resources=resources)
+    for _ in range(3):
+        world.spawn_danger_zone()
     world.add_agent(agent, position=(random.randint(0, 9), random.randint(0, 9)))
     # Agregar un compañero basico para posibilitar acciones de cooperacion
     world.add_agent(BaseAgent(), position=(random.randint(0, 9), random.randint(0, 9)))

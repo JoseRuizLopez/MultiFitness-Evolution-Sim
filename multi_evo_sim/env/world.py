@@ -26,6 +26,8 @@ class World:
         self.danger_zones = danger_zones or []
 
         self.resource_regen = resource_regen
+        # Posición donde ocurrió la última cooperación
+        self.last_coop = None
 
     def add_agent(self, agent, position):
         """Registra un agente dentro del mundo en la posición indicada."""
@@ -87,6 +89,7 @@ class World:
 
     def step(self):
         """Avanza un tick en el mundo y actualiza m\u00e9tricas b\u00e1sicas."""
+        self.last_coop = None
         for idx, (agent, position) in enumerate(self.agents):
             if not getattr(agent, "alive", True):
                 continue
@@ -154,6 +157,7 @@ class World:
                     other.inventory += 1
                     agent.inventory -= 1
                     agent.shared_resources = getattr(agent, "shared_resources", 0) + 1
+                    self.last_coop = position
             return position
 
         return position

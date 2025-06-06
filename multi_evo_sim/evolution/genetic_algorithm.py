@@ -107,12 +107,12 @@ class NSGAII:
     def _evaluate_population(self, population):
         if self.n_jobs == 1:
             return [self.fitness_fn(ind) for ind in population]
-        from concurrent.futures import ProcessPoolExecutor
         from functools import partial
+        from ..utils.process_pool import get_pool
 
-        with ProcessPoolExecutor(max_workers=self.n_jobs) as executor:
-            func = partial(self.fitness_fn)
-            return list(executor.map(func, population))
+        pool = get_pool(self.n_jobs)
+        func = partial(self.fitness_fn)
+        return list(pool.map(func, population))
 
     # --- Ciclo principal de una generación ---
     def step(self):

@@ -9,16 +9,23 @@ from .agents.base_agent import BaseAgent
 from .agents.neural_agent import NeuralAgent
 from .evolution.genetic_algorithm import GeneticAlgorithm
 from .evolution.memetic_algorithm import MemeticNSGAII
-from concurrent.futures import ProcessPoolExecutor
 from functools import partial
 import multiprocessing
+from .utils.process_pool import get_pool
 from .evolution.fitness_functions import fitness_combinado
 from .visualization.logger import ExperimentLogger, log
 from .visualization.render import Renderer
 from . import config
 
 
-renderer = Renderer()
+# Renderer instance created lazily to avoid opening windows in worker processes
+renderer = None
+
+def _get_renderer():
+    global renderer
+    if renderer is None:
+        renderer = Renderer()
+    return renderer
 
 def _evaluate_agent(agent, steps: int = 100, draw: bool=False) -> list:
     """Ejecuta una simulaci\u00f3n corta con compa\u00f1eros y devuelve el fitness."""
@@ -38,21 +45,21 @@ def _evaluate_agent(agent, steps: int = 100, draw: bool=False) -> list:
     for _ in range(steps):
         world.step()
         if draw:
-            renderer.draw(world)
+            _get_renderer().draw(world)
     return fitness_combinado(agent)
 
 
 def _evaluate_population(population, steps: int = 100, draw: bool = False, n_jobs: int = 1):
     if n_jobs <= 1:
         return [_evaluate_agent(ind, steps=steps, draw=draw) for ind in population]
+    pool = get_pool(n_jobs)
     func = partial(_evaluate_agent, steps=steps, draw=draw)
-    with ProcessPoolExecutor(max_workers=n_jobs) as executor:
-        return list(executor.map(func, population))
+    return list(pool.map(func, population))
 
 
 def train(
-    population_size: int = 10,
-    generations: int = 5000,
+    population_size: int = 18,
+    generations: int = 10000,
     memetic: bool = config.USE_MEMETIC_ALGORITHM,
     best_path: str = "best_genotype.npy",
 ):
@@ -69,7 +76,7 @@ def train(
     logger = ExperimentLogger()
 
     for gen in range(1, generations+1):
-        if gen % 1000 == 0:
+        if gen % 5000 == 0:
             fitness = _evaluate_population(ga.population, draw=True, n_jobs=1)
         else:
             fitness = _evaluate_population(ga.population, draw=False, n_jobs=ga.n_jobs)

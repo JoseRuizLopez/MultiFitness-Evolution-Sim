@@ -7,6 +7,7 @@ from multi_evo_sim.env.resource import Resource
 from multi_evo_sim.agents.base_agent import BaseAgent, Action, ActionType
 
 
+
 def test_world_step_gather():
     world = World(width=3, height=3, resources=[Resource((0, 0))], resource_regen=False)
     agent = BaseAgent()
@@ -36,3 +37,19 @@ def test_danger_zone_kills_agent():
     world.step()
     assert agent.alive is False
     assert world.agents[0][1] == (1, 0)
+    
+def test_last_coop_updates_on_cooperate():
+    """Comprueba que tras cooperar se actualiza ``world.last_coop``."""
+
+    class CoopAgent(BaseAgent):
+        def act(self, _obs):
+            return Action(ActionType.COOPERATE)
+
+    world = World(width=3, height=3, resource_regen=False)
+    agent1 = CoopAgent()
+    agent1.inventory = 1
+    agent2 = BaseAgent()
+    world.add_agent(agent1, position=(1, 1))
+    world.add_agent(agent2, position=(1, 1))
+    world.step()
+    assert world.last_coop == (1, 1)

@@ -14,12 +14,16 @@ class Renderer:
         if self.record:
             if writers.is_available("ffmpeg"):
                 self.writer = FFMpegWriter(fps=10)
-                self.writer.setup(self.fig, video_path)
+                try:
+                    self.writer.setup(self.fig, video_path)
+                except FileNotFoundError:
+                    logging.warning("No se encontró FFmpeg. Desactivando grabación.")
+                    self.record = False
+                    self.writer = None
             else:
-                logging.warning(
-                    "FFmpeg no est\u00e1 disponible. Desactivando grabaci\u00f3n."
-                )
+                logging.warning("FFmpeg no está disponible. Desactivando grabación.")
                 self.record = False
+
 
     def draw(self, world):
         """Dibuja el estado actual del mundo."""

@@ -125,7 +125,7 @@ multi_evo_sim/
 - Guardar videos de los dibujos generados de matplotlib. Para ello
   puedes crear ``Renderer(record=True, video_path="salida.mp4")`` o
   ejecutar los módulos ``main`` o ``training`` con la opción ``--record``.
-- Para grabar es necesario tener **FFmpeg** instalado y accesible desde la línea de comandos.
+- Para grabar es necesario tener **FFmpeg** instalado y accesible desde la línea de comandos. Si no se encuentra, la grabación se desactivará y se mostrará una advertencia.
 - Indicar en el titulo del plot, el número de la población que es.
 - Representar visualmente en el plot cada vez que se comparten recursos.
 - Añadir zonas de peligro.

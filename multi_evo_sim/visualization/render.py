@@ -39,7 +39,7 @@ class Renderer:
             if world.grid:
                 x += 0.5
                 y += 0.5
-            self.ax.scatter(x, y, c="blue", s=150, marker="*")
+            self.ax.scatter(x, y, c="purple", s=150, marker="*")
 
         self.ax.set_title("Simulación")
         plt.draw()

@@ -30,7 +30,12 @@ def _get_renderer():
         renderer = Renderer(record=_record, video_path=_video_path)
     return renderer
 
-def _evaluate_agent(agent, steps: int = 100, draw: bool=False) -> list:
+def _evaluate_agent(
+    agent,
+    steps: int = 100,
+    draw: bool = False,
+    generation: int | None = None,
+) -> list:
     """Ejecuta una simulaci\u00f3n corta con compa\u00f1eros y devuelve el fitness."""
     agent.inventory = 0
     agent.resources_collected = 0
@@ -48,15 +53,24 @@ def _evaluate_agent(agent, steps: int = 100, draw: bool=False) -> list:
     for _ in range(steps):
         world.step()
         if draw:
-            _get_renderer().draw(world)
+            _get_renderer().draw(world, generation)
     return fitness_combinado(agent)
 
 
-def _evaluate_population(population, steps: int = 100, draw: bool = False, n_jobs: int = 1):
+def _evaluate_population(
+    population,
+    steps: int = 100,
+    draw: bool = False,
+    n_jobs: int = 1,
+    generation: int | None = None,
+):
     if n_jobs <= 1:
-        return [_evaluate_agent(ind, steps=steps, draw=draw) for ind in population]
+        return [
+            _evaluate_agent(ind, steps=steps, draw=draw, generation=generation)
+            for ind in population
+        ]
     pool = get_pool(n_jobs)
-    func = partial(_evaluate_agent, steps=steps, draw=draw)
+    func = partial(_evaluate_agent, steps=steps, draw=draw, generation=generation)
     return list(pool.map(func, population))
 
 
@@ -78,11 +92,15 @@ def train(
     ga = ga_cls(population, _evaluate_agent, n_jobs=n_jobs)
     logger = ExperimentLogger()
 
-    for gen in range(1, generations+1):
-        if gen % 10 == 0:
-            fitness = _evaluate_population(ga.population, draw=True, n_jobs=1)
+    for gen in range(1, generations + 1):
+        if gen % 5000 == 0:
+            fitness = _evaluate_population(
+                ga.population, draw=True, n_jobs=1, generation=gen
+            )
         else:
-            fitness = _evaluate_population(ga.population, draw=False, n_jobs=ga.n_jobs)
+            fitness = _evaluate_population(
+                ga.population, draw=False, n_jobs=ga.n_jobs, generation=gen
+            )
         fronts, _ = ga.fast_non_dominated_sort(fitness)
         logger.log_fitness(gen, fitness)
         inventories = [ind.inventory for ind in ga.population]

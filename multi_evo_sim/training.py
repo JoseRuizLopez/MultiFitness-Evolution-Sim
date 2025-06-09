@@ -93,7 +93,7 @@ def train(
     logger = ExperimentLogger()
 
     for gen in range(1, generations + 1):
-        if gen % 5000 == 0:
+        if gen % 10 == 0:
             fitness = _evaluate_population(
                 ga.population, draw=True, n_jobs=1, generation=gen
             )

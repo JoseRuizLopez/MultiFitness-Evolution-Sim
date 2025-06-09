@@ -60,7 +60,6 @@ class Renderer:
                 x += 0.5
                 y += 0.5
             self.ax.scatter(x, y, c="purple", s=150, marker="*")
-
         if generation is not None:
             self.ax.set_title(f"Simulación - generación {generation}")
         else:

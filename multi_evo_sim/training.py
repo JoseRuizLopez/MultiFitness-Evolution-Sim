@@ -70,13 +70,13 @@ def _evaluate_population(
             for ind in population
         ]
     pool = get_pool(n_jobs)
-    func = partial(_evaluate_agent, steps=steps, draw=draw, generation=generation)
+    func = partial(_evaluate_agent, steps=steps, draw=draw)
     return list(pool.map(func, population))
 
 
 def train(
-    population_size: int = 2,
-    generations: int = 20,
+    population_size: int = 18,
+    generations: int = 10000,
     memetic: bool = config.USE_MEMETIC_ALGORITHM,
     best_path: str = "best_genotype.npy",
 ):
@@ -93,13 +93,13 @@ def train(
     logger = ExperimentLogger()
 
     for gen in range(1, generations + 1):
-        if gen % 10 == 0:
+        if gen % 5000 == 0:
             fitness = _evaluate_population(
                 ga.population, draw=True, n_jobs=1, generation=gen
             )
         else:
             fitness = _evaluate_population(
-                ga.population, draw=False, n_jobs=ga.n_jobs, generation=gen
+                ga.population, draw=False, n_jobs=ga.n_jobs
             )
         fronts, _ = ga.fast_non_dominated_sort(fitness)
         logger.log_fitness(gen, fitness)

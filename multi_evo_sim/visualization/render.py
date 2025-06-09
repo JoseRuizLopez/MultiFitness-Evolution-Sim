@@ -38,6 +38,13 @@ class Renderer:
             self.ax.set_yticks(range(world.height + 1))
             self.ax.grid(True, which="both")
 
+        for zone in world.danger_zones:
+            x, y = zone
+            if world.grid:
+                x += 0.5
+                y += 0.5
+            self.ax.scatter(x, y, c="black", s=80, marker="x")
+
         for res in world.resources:
             if not res.consumed:
                 x, y = res.position

@@ -5,7 +5,6 @@ import numpy as np
 
 from .env.world import World
 from .env.resource import Resource
-from .agents.base_agent import BaseAgent
 from .agents.neural_agent import NeuralAgent
 from .evolution.genetic_algorithm import GeneticAlgorithm
 from .evolution.memetic_algorithm import MemeticNSGAII
@@ -40,8 +39,13 @@ def _evaluate_agent(agent, steps: int = 100, draw: bool=False) -> list:
     resources = [Resource((random.randint(0, 9), random.randint(0, 9))) for _ in range(10)]
     world = World(width=10, height=10, resources=resources)
     world.add_agent(agent, position=(random.randint(0, 9), random.randint(0, 9)))
-    # Agregar un compañero basico para posibilitar acciones de cooperacion
-    world.add_agent(BaseAgent(), position=(random.randint(0, 9), random.randint(0, 9)))
+    # Agregar un compañero neuronal para posibilitar acciones de cooperación
+    try:
+        companion_genotype = np.load("best_genotype.npy")
+    except FileNotFoundError:
+        companion_genotype = None
+    companion = NeuralAgent(genotype=companion_genotype)
+    world.add_agent(companion, position=(random.randint(0, 9), random.randint(0, 9)))
     for _ in range(steps):
         world.step()
         if draw:

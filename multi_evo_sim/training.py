@@ -47,20 +47,44 @@ def _evaluate_agent(
     agent.alive = True
     agent.steps_survived = 0 
 
-    # Mas recursos y un agente adicional permiten que se observe cooperacon y
+    # Mas recursos y un agente adicional permiten que se observe cooperacion y
     # crecimiento durante la evaluacion, generando fitness mas variado.
-    resources = [Resource((random.randint(0, 9), random.randint(0, 9))) for _ in range(10)]
-    world = World(width=10, height=10, resources=resources)
+    resources = [
+        Resource(
+            (
+                random.randint(0, config.WORLD_WIDTH - 1),
+                random.randint(0, config.WORLD_HEIGHT - 1),
+            )
+        )
+        for _ in range(10)
+    ]
+    world = World(
+        width=config.WORLD_WIDTH,
+        height=config.WORLD_HEIGHT,
+        resources=resources,
+    )
     for _ in range(5):
         world.spawn_danger_zone()
-    world.add_agent(agent, position=(random.randint(0, 9), random.randint(0, 9)))
+    world.add_agent(
+        agent,
+        position=(
+            random.randint(0, config.WORLD_WIDTH - 1),
+            random.randint(0, config.WORLD_HEIGHT - 1),
+        ),
+    )
     # Agregar un compañero neuronal para posibilitar acciones de cooperación
     try:
         companion_genotype = np.load("best_genotype.npy")
     except FileNotFoundError:
         companion_genotype = None
     companion = NeuralAgent(genotype=companion_genotype)
-    world.add_agent(companion, position=(random.randint(0, 9), random.randint(0, 9)))
+    world.add_agent(
+        companion,
+        position=(
+            random.randint(0, config.WORLD_WIDTH - 1),
+            random.randint(0, config.WORLD_HEIGHT - 1),
+        ),
+    )
     for _ in range(steps):
         world.step()
         if draw:

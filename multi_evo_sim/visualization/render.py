@@ -1,6 +1,7 @@
 import logging
 import matplotlib.pyplot as plt
 from matplotlib.animation import FFMpegWriter, writers
+from matplotlib.patches import Rectangle
 
 
 class Renderer:
@@ -40,10 +41,12 @@ class Renderer:
 
         for zone in world.danger_zones:
             x, y = zone
+            color = "red"
             if world.grid:
-                x += 0.5
-                y += 0.5
-            self.ax.scatter(x, y, c="black", s=80, marker="x")
+                rect = Rectangle((x, y), 1, 1, color=color, alpha=0.3)
+            else:
+                rect = Rectangle((x - 0.5, y - 0.5), 1, 1, color=color, alpha=0.3)
+            self.ax.add_patch(rect)
 
         for res in world.resources:
             if not res.consumed:

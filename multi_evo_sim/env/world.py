@@ -26,6 +26,8 @@ class World:
         self.danger_zones = danger_zones or []
 
         self.resource_regen = resource_regen
+        # Posición donde ocurrió la última cooperación
+        self.last_coop = None
 
     def add_agent(self, agent, position):
         """Registra un agente dentro del mundo en la posición indicada."""
@@ -55,6 +57,11 @@ class World:
         pos = self._random_position()
         self.resources.append(Resource(pos, value))
 
+    def spawn_danger_zone(self):
+        """Crea una zona peligrosa en una posición libre aleatoria."""
+        pos = self._random_position()
+        self.danger_zones.append(pos)
+
     # ------------------------------------------------------------------
     # Utilidades internas
     # ------------------------------------------------------------------
@@ -64,7 +71,7 @@ class World:
             x = random.uniform(0, self.width) if not self.grid else random.randrange(self.width)
             y = random.uniform(0, self.height) if not self.grid else random.randrange(self.height)
             pos = (x, y)
-            if not self.is_obstacle(pos):
+            if not self.is_obstacle(pos) and not self.is_danger(pos):
                 return pos
 
     def is_obstacle(self, position):
@@ -87,6 +94,7 @@ class World:
 
     def step(self):
         """Avanza un tick en el mundo y actualiza m\u00e9tricas b\u00e1sicas."""
+        self.last_coop = None
         for idx, (agent, position) in enumerate(self.agents):
             if not getattr(agent, "alive", True):
                 continue
@@ -154,6 +162,7 @@ class World:
                     other.inventory += 1
                     agent.inventory -= 1
                     agent.shared_resources = getattr(agent, "shared_resources", 0) + 1
+                    self.last_coop = position
             return position
 
         return position

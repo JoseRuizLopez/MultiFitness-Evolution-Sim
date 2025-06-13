@@ -25,10 +25,16 @@ class Renderer:
                 self.record = False
 
 
-    def draw(self, world, generation: int | None = None):
+    def draw(
+        self,
+        world,
+        generation: int | None = None,
+        agent_index: int | None = None,
+    ):
         """Dibuja el estado actual del mundo.
 
-        Si se proporciona ``generation`` muestra el n\u00famero en el t\u00edtulo.
+        Si se proporcionan ``generation`` o ``agent_index`` se muestran en el
+        t\u00edtulo de la figura.
         """
         self.ax.clear()
         self.ax.set_xlim(0, world.width)
@@ -60,10 +66,12 @@ class Renderer:
                 x += 0.5
                 y += 0.5
             self.ax.scatter(x, y, c="purple", s=150, marker="*")
+        titulo = ["Simulación"]
         if generation is not None:
-            self.ax.set_title(f"Simulación - generación {generation}")
-        else:
-            self.ax.set_title("Simulación")
+            titulo.append(f"generación {generation}")
+        if agent_index is not None:
+            titulo.append(f"individuo {agent_index}")
+        self.ax.set_title(" - ".join(titulo))
 
         plt.draw()
         plt.pause(0.001)

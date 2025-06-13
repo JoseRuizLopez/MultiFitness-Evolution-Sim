@@ -35,8 +35,13 @@ def _evaluate_agent(
     steps: int = 100,
     draw: bool = False,
     generation: int | None = None,
+    agent_index: int | None = None,
 ) -> list:
-    """Ejecuta una simulaci\u00f3n corta con compa\u00f1eros y devuelve el fitness."""
+    """Ejecuta una simulaci\u00f3n corta con compa\u00f1eros y devuelve el fitness.
+
+    Cuando ``draw`` es ``True`` se pasa ``agent_index`` a ``Renderer.draw`` para
+    mostrar qué individuo se evalúa.
+    """
     agent.inventory = 0
     agent.resources_collected = 0
     agent.shared_resources = 0
@@ -53,7 +58,7 @@ def _evaluate_agent(
     for _ in range(steps):
         world.step()
         if draw:
-            _get_renderer().draw(world, generation)
+            _get_renderer().draw(world, generation, agent_index)
     return fitness_combinado(agent)
 
 
@@ -66,8 +71,14 @@ def _evaluate_population(
 ):
     if n_jobs <= 1:
         return [
-            _evaluate_agent(ind, steps=steps, draw=draw, generation=generation)
-            for ind in population
+            _evaluate_agent(
+                ind,
+                steps=steps,
+                draw=draw,
+                generation=generation,
+                agent_index=i if draw else None,
+            )
+            for i, ind in enumerate(population)
         ]
     pool = get_pool(n_jobs)
     func = partial(_evaluate_agent, steps=steps, draw=draw)

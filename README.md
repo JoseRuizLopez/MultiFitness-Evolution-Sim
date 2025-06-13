@@ -128,8 +128,8 @@ multi_evo_sim/
 - Para grabar es necesario tener **FFmpeg** instalado y accesible desde la línea de comandos. Si no se encuentra, la grabación se desactivará y se mostrará una advertencia.
 - Indicar en el titulo del plot, el número de la población que es.
 - Representar visualmente en el plot cada vez que se comparten recursos.
+- El compañero de entrenamiento ahora es un `NeuralAgent` que puede cargarse con el genotipo almacenado en `best_genotype.npy` para compartir aprendizaje.
 - Las zonas de peligro se representan en el mapa.
-- Sustituir el agente basico aleatorio por otro agente neuronal, que comparten entrenamiento (para que se tenga en cuenta o no, a la hora de realizar el fitness).
 
 
 ## Ejecución rápida
@@ -167,7 +167,10 @@ multi_evo_sim/
    inventario final de cada agente en cada generación. Además se crea el
    fichero `best_genotype.npy` con el vector de pesos del individuo que
    obtuvo el mejor fitness al finalizar, para poder reproducir su
-   comportamiento en ejecuciones posteriores.
+   comportamiento en ejecuciones posteriores. Durante cada evaluación se
+   agrega un `NeuralAgent` auxiliar como compañero de entrenamiento, que si
+   existe `best_genotype.npy` se inicializa con ese genotipo para compartir
+   conocimiento.
 
 El archivo `multi_evo_sim/config.py` contiene parámetros globales como el tamaño
 del mundo, el número de agentes inicial y los pesos de cada métrica de fitness.

@@ -33,3 +33,21 @@ def test_last_coop_updates_on_cooperate():
     world.add_agent(agent2, position=(1, 1))
     world.step()
     assert world.last_coop == (1, 1)
+
+
+def test_agent_dies_in_danger_zone():
+    class RightAgent(BaseAgent):
+        def act(self, _obs):
+            return Action(ActionType.MOVE, direction=(1, 0))
+
+    world = World(width=3, height=3, danger_zones=[(1, 0)], resource_regen=False)
+    agent = RightAgent()
+    world.add_agent(agent, position=(0, 0))
+    world.step()
+    assert agent.alive is False
+
+
+def test_spawn_danger_zone_adds_zone():
+    world = World(width=5, height=5)
+    world.spawn_danger_zone()
+    assert len(world.danger_zones) == 1

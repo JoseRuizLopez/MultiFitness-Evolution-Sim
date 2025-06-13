@@ -128,7 +128,7 @@ multi_evo_sim/
 - Para grabar es necesario tener **FFmpeg** instalado y accesible desde la línea de comandos. Si no se encuentra, la grabación se desactivará y se mostrará una advertencia.
 - Indicar en el titulo del plot, el número de la población que es.
 - Representar visualmente en el plot cada vez que se comparten recursos.
-- Añadir zonas de peligro.
+- Las zonas de peligro se representan en el mapa.
 - Sustituir el agente basico aleatorio por otro agente neuronal, que comparten entrenamiento (para que se tenga en cuenta o no, a la hora de realizar el fitness).
 
 

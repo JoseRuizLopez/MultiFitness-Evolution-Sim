@@ -57,6 +57,11 @@ class World:
         pos = self._random_position()
         self.resources.append(Resource(pos, value))
 
+    def spawn_danger_zone(self):
+        """Crea una zona peligrosa en una posición libre aleatoria."""
+        pos = self._random_position()
+        self.danger_zones.append(pos)
+
     # ------------------------------------------------------------------
     # Utilidades internas
     # ------------------------------------------------------------------
@@ -66,7 +71,7 @@ class World:
             x = random.uniform(0, self.width) if not self.grid else random.randrange(self.width)
             y = random.uniform(0, self.height) if not self.grid else random.randrange(self.height)
             pos = (x, y)
-            if not self.is_obstacle(pos):
+            if not self.is_obstacle(pos) and not self.is_danger(pos):
                 return pos
 
     def is_obstacle(self, position):

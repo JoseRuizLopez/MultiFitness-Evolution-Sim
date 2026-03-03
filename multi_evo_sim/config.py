@@ -7,12 +7,11 @@ POPULATION_SIZE = 10
 # ``GeneticAlgorithm``.
 USE_MEMETIC_ALGORITHM = True
 
-# Pesos para las distintas métricas de fitness
+# Pesos de referencia para las métricas de fitness.
+# NOTA: fitness_combinado() ya no usa estos pesos — devuelve los 5 objetivos
+# por separado para que NSGA-II construya frentes de Pareto reales.
+# Se mantiene aquí como referencia para experimentos con suma ponderada manual.
 FITNESS_WEIGHTS = {
-    # Las métricas que tienden a permanecer constantes en simulaciones
-    # cortas reciben un peso menor para evitar que dominen el fitness
-    # total. Se da mayor importancia a la cooperación y al crecimiento
-    # para observar variaciones significativas.
     "eficiencia": 0.5,
     "diversidad_genetica": 0.5,
     "cooperacion": 1.0,

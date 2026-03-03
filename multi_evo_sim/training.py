@@ -133,10 +133,17 @@ def train(
         renderer.close()
 
     if 'fitness' in locals() and fitness:
-        best_idx = max(
-            range(len(fitness)),
-            key=lambda i: fitness[i][0] if isinstance(fitness[i], (list, tuple)) else fitness[i],
-        )
+        # Con fitness multi-objetivo, el mejor individuo es el que pertenece
+        # al primer frente de Pareto con mayor crowding distance (más diverso).
+        # Usar solo fitness[i][0] ignoraría los otros 4 objetivos.
+        fronts, _ = ga.fast_non_dominated_sort(fitness)
+        if fronts and fronts[0]:
+            first_front = fronts[0]
+            distances = ga.crowding_distance(first_front, fitness)
+            best_in_front = max(range(len(first_front)), key=lambda i: distances[i])
+            best_idx = first_front[best_in_front]
+        else:
+            best_idx = 0
         np.save(best_path, ga.population[best_idx].genotype)
 
 
